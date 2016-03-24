@@ -6,4 +6,4 @@ mode = "0644"
 keys = [ 
 	"/sites" 
 ]
-reload_cmd = "echo -e \"POST /containers/web-proxy/kill?signal=HUP HTTP/1.0\r\n\" | nc -U /var/run/docker.sock"
+reload_cmd = "echo -e \"POST /containers/$WEB_PROXY/kill?signal=HUP HTTP/1.0\r\n\" | nc -U /var/run/docker.sock"
