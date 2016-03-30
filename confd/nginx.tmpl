@@ -13,11 +13,34 @@ http {
     include       /etc/nginx/mime.types;
     default_type  application/octet-stream;
 
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                      '$status $body_bytes_sent "$http_referer" '
-                      '"$http_user_agent" "$http_x_forwarded_for"';
+    log_format json-log '{'
+                          '"body_bytes_sent":"$body_bytes_sent",'
+                          '"bytes_sent":"$bytes_sent",'
+                          '"connection":"$connection",'
+                          '"host":"$host",'
+                          '"hostname":"$hostname",'
+                          '"http_cookie":"$http_cookie"'
+                          '"http_dnt":"$http_dnt",'
+                          '"http_referer":"$http_referer",'
+                          '"http_user_agent":"$http_user_agent",'
+                          '"http_x_forwarded_for":"$http_x_forwarded_for",'
+                          '"msec":"$msec",'
+                          '"query_string":"$query_string",'
+                          '"remote_addr":"$remote_addr",'
+                          '"request":"$request",'
+                          '"request_method":"$request_method",'
+                          '"request_time":"$request_time",'
+                          '"request_uri":"$request_uri",'
+                          '"server_addr":"$server_addr",'
+                          '"server_name":"$server_name",'
+                          '"server_port":"$server_port",'
+                          '"server_protocol":"$server_protocol",'
+                          '"status":"$status",'
+                          '"time_iso8601":"$time_iso8601",'
+                          '"uri":"$uri",'
+                          '}';
 
-    access_log  /var/log/nginx/access.log  main;
+    access_log  /var/log/nginx/access.log  json-log;
 
     sendfile        on;
 
@@ -54,4 +77,16 @@ http {
             }
         }
     {{end}}
+
+    server {
+        listen 80 default_server;
+        server_name _;
+        return 444;
+    }
+
+    server {
+        listen 443 default_server;
+        server_name _;
+        return 444;
+    }
 }
